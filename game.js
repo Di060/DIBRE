@@ -127,7 +127,7 @@ function update(){
     var cancan = document.getElementById('canvas');
     var bodyzinho = document.getElementById('zin');
     var butao = document.getElementById('AA');
-    
+
     //Dano ao boss
     if (tiro.y<-32 && boss.image>=37) boss.sprite=bs;
     if (tiro.x>boss.x-72 && tiro.x<boss.x+72 && tiro.y<boss.y && tiro.y>0 && boss.enche===false && boss.image>=37) {
@@ -136,6 +136,7 @@ function update(){
         boss.sprite=bd;
         tiro.y=-16;
         score+=dmg;
+        document.getElementById('MSGx').innerHTML = "<br>";
         //bdano.play()
 
         boss.hp-=dmg;
@@ -261,7 +262,7 @@ function update(){
         htiro.spd=2
         break;
     }
-    if (lvl>1) {
+    if (lvl>5) {
         boss.deathray--;
         if (boss.deathray<0) boss.deathray=500;
     }
