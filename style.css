@@ -1,7 +1,7 @@
 body {
 	font-family: consolas;
 	color: white;
-	background-image: url("fundo.png");
+	background-image: url("fundo.png"), linear-gradient(to right,black, white, white, white, black);
 	text-shadow:  2px 2px 5px #000;
 	background-position: 0px;
 }
@@ -17,6 +17,7 @@ button {
 	color: #333;
 	transition-duration: 0.2s;
 	box-shadow: 2px 2px 5px #000;
+	font-weight: bold;
 }
 button:hover {
 	box-shadow: 2px 2px 5px #f00;
@@ -33,10 +34,13 @@ iframe{
 }
  #canvas {
  	border-radius: 16px;
- }
+ }/*
  #MSGx {
  	-webkit-animation: blinky 2s infinite;
- }
+ 	<button id="AA" onclick="javascript:
+        location.reload(false);">RESTART</button>
+
+ }*/
 
  @-webkit-keyframes blinky{
  	from {opacity: 1;}
@@ -53,7 +57,7 @@ iframe{
 	<font color="#aaa">&bull;</font>
 	<font color="#fff">R</font>
 	<font color="#aaa">&bull;</font>
-	<font color="#fff">E</font></h1>*/
+	<font color="#fff">E</font></h1>
 
 div {
  	border-radius: 16px;
@@ -68,7 +72,7 @@ div {
     color: white;
     padding: 0px 48px;
     border: 4px solid #555;
- }
+ }*/
 h1 {
 	font-size: 48px;
 	display: inline;
@@ -87,8 +91,15 @@ h5 {
 	background-color: #333;
 }
 ::-webkit-scrollbar-thumb {
-	background-color: #777
+	background-color: teal;
 }
 ::-webkit-scrollbar-button {
 	background-color: #888
+}
+footer {
+	position: absolute;
+	width: 100%;
+	left: -6px;
+	bottom: 0;
+	display: block;
 }

@@ -1,145 +1,46 @@
-//
-//
-//          QUE COISA FEIA, ESPIONANDO O CODIGO DOS OUTROS!!!
-//
-//
 (function() {
     var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     window.requestAnimationFrame = requestAnimationFrame;
 })();
 
-//Sprites--------------------------------------------
-
-var bs = new Image(), //Boss normal
-    bd = new Image(), //Boss tomando dano
-    ch = new Image(), //Chão
-    bg = new Image(), //Fundo
-    appear = [],      //Animação
-    pp = 0,
-    aaa=42;
-
-while (pp<38){
-    appear[pp]=(new Image());
-    appear[pp].src=("assets/sprites/spr_entrada/spr_boss1ap_"+pp+".png");
-    pp++;
-}
-
-aaa=Math.floor(Math.random()*42);
-
-if (aaa==1)  bs.src="assets/sprites/spr_chocoboss.png";
-else bs.src="assets/sprites/spr_boss.png";
-bd.src="assets/sprites/spr_boss_damage.png";
-ch.src="assets/sprites/spr_chao.png";
-bg.src="assets/sprites/spr_fundo.png";
-
-//Sons-----------------------------------------------
-var filling = new Audio("assets/sons/filling.wav"),
-    remonta = new Audio("assets/sons/reassemble.wav"),
-    pulo = new Audio("assets/sons/jump.wav"),
-    dano = new Audio("assets/sons/damage.wav"),
-    bdano = new Audio("assets/sons/bdamage.wav"),
-    pfire = new Audio("assets/sons/pfire.wav");
-
 //O-Resto--------------------------------------------
 
-var canvas = document.getElementById("canvas"),
-    ctx = canvas.getContext("2d"),
-    width = 640,
-    height = 600,
-    player = {
-        x : width/2,
-        y : height-72,
-        width : 32,
-        height : 32,
-        vel : 6,
-        spdX : 0,
-        spdY :0
-    },
-    bgcol="#fff",
-    chao=height-64,
-    boss = {
-         x : width/2,
-        y : 96,
-        ystart : 96,
-        col : "#fff",
-        hp : 2,
-        fase : 1,
-        enche : false,
-        sprite : bs,
-        w : 160,
-        h : 160,
-        image : 0,
-        deathray : 0
-    },
-    tiro = {
-        x : 0,
-        y : 0,
-        vspd : -20
-    },
-    btiro = {
-        x : 1000,
-        y : 1000,
-        spd : 0,
-        mspd : 5.5
-    },
-    htiro = {
-        x : -100,
-        y : height-128,
-        spd : 0,
-        mspd : 1
-    },
-    friction=0.8,
-    gravity=0.5,
-    k = 0,
-    pausa = false,
-    started = false,
-    txt = "",
-    bhp = 32,
-    walls = {
-        size : -64,
-        y : 256
-    },
-    vidas = 3,
-    score = 0,
-    lvl = 1,
-    dmg = 1,
-    rato = {
-        x: 0,
-        y :0
-    },
-    tecla = [];
+var cursorX;
+var cursorY;
 
-canvas.width = width;
-canvas.height = height;
+var mouseDown = 0;
+document.body.onmousedown = function() { 
+  //++mouseDown;
+  mouseDown=1;
+}
+document.body.onmouseup = function() {
+  //--mouseDown;
+  mouseDown=0;
+}
 
-document.body.addEventListener("keydown", function(e) {
-    tecla[e.keyCode] = true;
-    k = e.keyCode;
-});
- 
-document.body.addEventListener("keyup", function(e) {
-    tecla[e.keyCode] = false;
-});
-
-boss.hp=bhp;
 function update(){
 
     var cancan = document.getElementById('canvas');
     var bodyzinho = document.getElementById('zin');
-    var butao = document.getElementById('AA');
+    var botao = document.getElementById('AA');
+    var rect = canvas.getBoundingClientRect();
 
     //Dano ao boss
-    if (tiro.y<-32 && boss.image>=37) boss.sprite=bs;
+    if (tiro.y<-32 && boss.image>=37) boss.sprite=spr_boss;
     if (tiro.x>boss.x-72 && tiro.x<boss.x+72 && tiro.y<boss.y && tiro.y>0 && boss.enche===false && boss.image>=37) {
         started=true;
         btiro.spd=btiro.mspd;
-        boss.sprite=bd;
+        boss.sprite=spr_boss_damage;
         tiro.y=-16;
         score+=dmg;
-        document.getElementById('MSGx').innerHTML = "<br>";
+        if ((lvl==1) && (boss.hp>31)) document.getElementById('MSGx').innerHTML = '<button id="AA" onclick="javascript: location.reload(false);">RESTART</button>';
         //bdano.play()
 
         boss.hp-=dmg;
+    }
+    document.onmousemove = function(e){
+        cursorX = e.clientX-rect.left;
+        cursorY = e.clientY-rect.top;
     }
 
     //Animação do Boss
@@ -195,10 +96,11 @@ function update(){
         htiro.y=-128;
     }
     if (vidas<0) {
-        butao.style="background-color: red; color: white;";
+        vidas=0
+        botao.style="background-color: red; color: white;";
         document.getElementById('canvas').style="border: 4px dotted red;";
-        document.getElementById('zin').style="background-color: red;";
-        document.getElementById('MSGx').innerHTML = "GAME OVER";
+        document.getElementById('zin').style='background-image: url("fundo.png"), linear-gradient(to right,black,red,red,red,black);'
+        document.getElementById('MSGx').innerHTML = '<button id="AA" onclick="javascript: location.reload(false);">RESTART</button><br>GAME OVER';
         return;
     }
 
@@ -234,8 +136,8 @@ function update(){
             case("#0af"): {bgcol="#fff"; break;}
             case("#fff"): {bgcol="#0f0"; break;}}
         cancan.style="border: 4px dotted "+bgcol+";"
-        bodyzinho.style="background-color: "+bgcol+";"
-        butao.style="background-color: "+bgcol+";"
+        bodyzinho.style='background-image: url("fundo.png"), linear-gradient(to right,black,'+bgcol+','+bgcol+','+bgcol+',black);'
+        botao.style="background-color: "+bgcol+";"
         boss.image=-37;
     }
     if (bgcol=="#0ff") friction=0.98;
@@ -249,7 +151,7 @@ function update(){
     }
     if (boss.hp<bhp) {
         boss.hp+=0.01;
-    }''
+    }
     if (boss.w<160) {
         boss.w+=4;
         boss.h+=4;
@@ -262,7 +164,9 @@ function update(){
         htiro.spd=2
         break;
     }
-    if (lvl>5) {
+    if ((lvl>5) && (lvl<11)) {
+        htiro.x=-100;
+        htiro.y=-100;
         boss.deathray--;
         if (boss.deathray<0) boss.deathray=500;
     }
@@ -270,11 +174,20 @@ function update(){
     //Teclas e movimento
 
     if (true/*btiro.spd!=0*/) {
-        if (tecla[37] && player.spdX > -player.vel) {
-        player.spdX--; };
-        if (tecla[39]  /*Direita  */ && player.spdX < player.vel) {
-        player.spdX++; };
-        if (tecla[38] && player.y+player.height>=chao) { player.spdY=-player.vel*2; pulo.play()};
+        if (((tecla[37]) || ((mouseDown==true) && (cursorX<(player.x-32)))) && player.spdX > -player.vel) {
+            player.spdX--;
+        }
+        if (((tecla[39]) || ((mouseDown==true) && (cursorX>(player.x+32)))) && player.spdX < player.vel) {
+            player.spdX++;
+        }
+        if ((tecla[38]) && player.y+player.height>=chao) {
+            player.spdY=-player.vel*2;
+            pulo.play();
+        }
+        if ((mouseDown==true) && (cursorY<320) && (player.y+player.height>=chao)) {
+            player.spdY=-player.vel*2;
+            pulo.play();
+        }
     }
     if ((tecla[32] || started==true) && tiro.y<-16 && pausa==false) {
         //document.getElementById('MSGx').innerHTML = "<BR>";
@@ -330,7 +243,7 @@ function update(){
     }
     if (player.x<22) player.x=22;
     if (player.x>width-player.width+16) player.x=width-player.width+16;
-    if (!tecla[38] &&(player.y+player.height) >=chao) { player.spdY=0; player.y=chao-player.height/2; };
+    if (!tecla[38] && (mouseDown==0 || cursorY>320) &&(player.y+player.height) >=chao) { player.spdY=0; player.y=chao-player.height/2; };
 
     // Desenhar
     ctx.globalAlpha =1;
@@ -371,7 +284,7 @@ function update(){
 
     //Chão
     ctx.fillStyle = "#000";   
-    ctx.drawImage(ch,0,chao);
+    ctx.drawImage(spr_chao,0,chao);
 
     //Jogador
     /*

@@ -6,14 +6,25 @@
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>D&bull;I&bull;B&bull;R&bull;E</title>
 </head>
-<body id="zin">
+<body id="zin"><div>
 	<center><br>
 	
 	<canvas id="canvas"></canvas>
-	<script type="text/javascript" src="game.js"></script><br>
-	<h3 id="MSGx">Press the SPACE BAR to start.</h3>
-	<button id="AA" onclick="javascript:
-        location.reload(false);">RESTART</button>
-    </center>
+
+	<script type="text/javascript" src="sprites.js"></script>
+	<script type="text/javascript" src="sons.js"></script>
+	<script type="text/javascript" src="vars.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+
+	<br><br>
+	<div id="MSGx">
+	<button class="AA" onclick="javascript: started=true;">START</button>
+	<h3>Fire at the boss to start.</h3>
+	</div>
+
+    <footer><p>
+    	Game and webpage made by Diogo P. Silva
+    </p></footer>
+    </center></div>
 </body>
 </html>
